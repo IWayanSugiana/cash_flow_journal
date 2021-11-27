@@ -1,5 +1,7 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:cash_flow_journal/constant/colors.dart';
 import 'package:cash_flow_journal/constant/text_style.dart';
+import 'package:cash_flow_journal/interface/auth_page.dart';
 import 'package:flutter/material.dart';
 
 class WelcomePage extends StatelessWidget {
@@ -8,55 +10,88 @@ class WelcomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: backgroundColor,
-        title: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: Text(
-            "Cash Flow Journal",
-            style: textTheme.headline5
-                ?.apply(color: primaryColor, fontWeightDelta: 3),
-          ),
-        ),
-      ),
-      body: Center(
-        child: Container(
-          color: backgroundColor,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Greeting(),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 24.0),
-                      child: Message(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const AppTitle(),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SlideInRight(
+                        child: const Greeting(),
+                        from: size.width + 10,
+                        delay: const Duration(seconds: 1),
+                        duration: const Duration(seconds: 2),
+                      ),
+                      SlideInRight(
+                        child: const Padding(
+                          padding: EdgeInsets.only(top: 24.0, bottom: 48),
+                          child: Message(),
+                        ),
+                        from: size.width + 10,
+                        delay: const Duration(seconds: 2),
+                        duration: const Duration(seconds: 2),
+                      ),
+                    ],
+                  ),
+                ),
+                FadeIn(
+                  child: Center(
+                    child: SizedBox(
+                      width: 175,
+                      height: 45,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, AuthPage.routeName);
+                        },
+                        child: Text(
+                          'Mulai',
+                          style: textTheme.button,
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: primaryColor,
+                          onPrimary: onPrimaryColor,
+                          elevation: 0,
+                        ),
+                      ),
                     ),
-                  ],
-                ),
-              ),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {},
-                  child: Text(
-                    'Mulai',
-                    style: textTheme.button,
                   ),
-                  style: ElevatedButton.styleFrom(
-                    primary: primaryColor,
-                    onPrimary: onPrimaryColor,
-                    elevation: 0,
-                  ),
-                ),
-              )
-            ],
+                  delay: const Duration(seconds: 4),
+                  duration: const Duration(seconds: 2),
+                )
+              ],
+            ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class AppTitle extends StatelessWidget {
+  const AppTitle({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 95,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Text(
+          'Cash Flow\nJournal',
+          style: textTheme.headline5
+              ?.copyWith(fontWeight: FontWeight.w700, color: primaryColor),
         ),
       ),
     );
@@ -72,54 +107,21 @@ class Message extends StatelessWidget {
   Widget build(BuildContext context) {
     return RichText(
       text: TextSpan(
-        text: 'Ayo mulai perjalanan\n',
-        style: textTheme.headline6?.apply(
-          color: onBackgroundColor,
-          fontWeightDelta: -2,
-        ),
-        children: <TextSpan>[
-          TextSpan(
-            text: 'journaling ',
-            style: textTheme.headline6?.apply(
-              color: onBackgroundColor,
-              fontStyle: FontStyle.italic,
-              fontWeightDelta: 3,
-            ),
+          text: 'Ayo mulai perjalanan\njournaling keuanganmu\nbersama ',
+          style: textTheme.headline6?.copyWith(
+            fontWeight: FontWeight.w200,
+            color: const Color.fromRGBO(116, 116, 116, 1),
+            fontStyle: FontStyle.italic,
           ),
-          TextSpan(
-            text: 'keuanganmu\n',
-            style: textTheme.headline6?.apply(
-              color: onBackgroundColor,
+          children: <TextSpan>[
+            TextSpan(
+              text: 'Cash Flow Journal',
+              style: textTheme.headline6?.apply(
+                color: primaryColor,
+                fontStyle: FontStyle.italic,
+              ),
             ),
-          ),
-          TextSpan(
-            text: 'Catat dan analisa',
-            style: textTheme.headline6?.apply(
-              backgroundColor: primaryVariantColor,
-              color: onPrimaryVariantColor,
-            ),
-          ),
-          TextSpan(
-            text: ' keuanganmu\n',
-            style: textTheme.headline6?.apply(
-              color: onBackgroundColor,
-            ),
-          ),
-          TextSpan(
-            text: 'bersama ',
-            style: textTheme.headline6?.apply(
-              color: onBackgroundColor,
-            ),
-          ),
-          TextSpan(
-            text: 'cashflow journal. ',
-            style: textTheme.headline6?.apply(
-              color: primaryColor,
-              fontWeightDelta: 3,
-            ),
-          ),
-        ],
-      ),
+          ]),
     );
   }
 }
@@ -134,18 +136,18 @@ class Greeting extends StatelessWidget {
     return RichText(
       text: TextSpan(
         text: 'Selamat Datang',
-        style: textTheme.headline5
+        style: textTheme.headline4
             ?.apply(color: onBackgroundColor, fontWeightDelta: 3),
         children: <TextSpan>[
           TextSpan(
             text: '\ndi ',
-            style: textTheme.headline5?.apply(
+            style: textTheme.headline4?.apply(
               color: onBackgroundColor,
             ),
           ),
           TextSpan(
-            text: 'Cash Flow Journal',
-            style: textTheme.headline5?.apply(
+            text: 'Cash Flow Journal.',
+            style: textTheme.headline4?.apply(
               color: primaryColor,
             ),
           ),

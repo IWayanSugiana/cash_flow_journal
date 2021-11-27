@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Cash Flow Journal',
-      theme: ThemeData(backgroundColor: primaryColor),
+      theme: ThemeData(scaffoldBackgroundColor: backgroundColor),
       initialRoute: WelcomePage.routeName,
       routes: {
         WelcomePage.routeName: (context) => const WelcomePage(),
