@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "94813181974",
+    "project_id": "cash-flow-journal",
+    "storage_bucket": "cash-flow-journal.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:94813181974:android:8d6123865f96a97644fd37",
+        "android_client_info": {
+          "package_name": "com.example.cash_flow_journal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "94813181974-hq57uroc26lihra1drn8a9l260jdo7p6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBcv9osoMfwAAC25ySqnbljWYImW8orKE0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "94813181974-hq57uroc26lihra1drn8a9l260jdo7p6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
