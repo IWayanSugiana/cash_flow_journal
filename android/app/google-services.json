@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:94813181974:android:8d6123865f96a97644fd37",
+        "mobilesdk_app_id": "1:94813181974:android:9b4ea2e02a4406dc44fd37",
         "android_client_info": {
-          "package_name": "com.example.cash_flow_journal"
+          "package_name": "com.cashflowjournal.android"
         }
       },
       "oauth_client": [
