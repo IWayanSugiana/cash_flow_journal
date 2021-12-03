@@ -1,7 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:cash_flow_journal/constant/colors.dart';
 import 'package:cash_flow_journal/constant/text_style.dart';
-import 'package:cash_flow_journal/interface/auth_page.dart';
+import 'package:cash_flow_journal/interface/login_page.dart';
 import 'package:flutter/material.dart';
 
 class WelcomePage extends StatelessWidget {
@@ -51,7 +51,8 @@ class WelcomePage extends StatelessWidget {
                       height: 45,
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, AuthPage.routeName);
+                          Navigator.pushReplacementNamed(
+                              context, LoginPage.routeName);
                         },
                         child: Text(
                           'Mulai',
