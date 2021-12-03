@@ -1,4 +1,4 @@
-package com.example.cash_flow_journal
+package com.cashflowjournal.android
 
 import io.flutter.embedding.android.FlutterActivity
 
