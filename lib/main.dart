@@ -1,4 +1,4 @@
-import 'package:cash_flow_journal/api/auth/service.dart';
+import 'package:cash_flow_journal/database/auth/auth_service.dart';
 import 'package:cash_flow_journal/constant/colors.dart';
 import 'package:cash_flow_journal/helper/router_helper.dart';
 import 'package:cash_flow_journal/interface/home_page.dart';
