@@ -1,5 +1,8 @@
-import 'package:cash_flow_journal/database/auth/auth_service.dart';
+import 'dart:ui';
+
 import 'package:cash_flow_journal/constant/colors.dart';
+import 'package:cash_flow_journal/database/auth/auth_service.dart';
+import 'package:cash_flow_journal/helper/background_service.dart';
 import 'package:cash_flow_journal/helper/router_helper.dart';
 import 'package:cash_flow_journal/interface/home_page.dart';
 import 'package:cash_flow_journal/interface/welcome_page.dart';
@@ -9,9 +12,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+const String _isolateName = 'isolate';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  BackgroundService backgroundService = BackgroundService();
+  IsolateNameServer.registerPortWithName(
+    port.sendPort,
+    _isolateName,
+  );
   runApp(const MyApp());
 }
 
@@ -20,11 +29,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<AuthenticationProvider>(
-            create: (_) => AuthenticationProvider(authService: AuthService()))
-      ],
+    return ChangeNotifierProvider<AuthenticationProvider>(
+      create: (_) => AuthenticationProvider(authService: AuthService()),
       child: MaterialApp(
         title: 'Cash Flow Journal',
         theme: ThemeData(scaffoldBackgroundColor: backgroundColor),
