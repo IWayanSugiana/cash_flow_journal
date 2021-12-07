@@ -1,3 +1,5 @@
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:cash_flow_journal/helper/background_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,7 +12,11 @@ class AuthService {
     try {
       UserCredential userCredential = await firebaseAuth
           .createUserWithEmailAndPassword(email: email, password: password);
-      _setHeaderToken();
+      final prefs = await SharedPreferences.getInstance();
+      String? _headerToken =
+          await FirebaseAuth.instance.currentUser?.getIdToken();
+      prefs.setString(HEADER_TOKEN, _headerToken ?? 'null');
+      tokenScheduling();
       return userCredential.user?.uid;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -25,9 +31,14 @@ class AuthService {
 
   Future<String?> signIn(String email, String password) async {
     try {
-      UserCredential userCredential = await firebaseAuth
-          .signInWithEmailAndPassword(email: email, password: password);
-      _setHeaderToken();
+      await firebaseAuth.signInWithEmailAndPassword(
+          email: email, password: password);
+
+      final prefs = await SharedPreferences.getInstance();
+      String? _headerToken =
+          await FirebaseAuth.instance.currentUser?.getIdToken();
+      prefs.setString(HEADER_TOKEN, _headerToken ?? 'null');
+      tokenScheduling();
       return 'Login Success';
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
@@ -40,29 +51,27 @@ class AuthService {
     }
   }
 
-  Future _setHeaderToken() async {
-    final prefs = await SharedPreferences.getInstance();
-
-    String? _headerToken =
-        await FirebaseAuth.instance.currentUser?.getIdToken();
-    prefs.setString(HEADER_TOKEN, _headerToken!);
-  }
-
   Future<String?> getHeaderToken() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getString(HEADER_TOKEN);
-  }
-
-  bool getUserStatus() {
-    User? user = firebaseAuth.currentUser;
-    if (user != null) {
-      return true;
-    } else {
-      return false;
-    }
+    final _headerToken = prefs.getString(HEADER_TOKEN);
+    return _headerToken;
   }
 
   Future<void> userSignOut() async {
+    await AndroidAlarmManager.cancel(5);
+    final prefs = await SharedPreferences.getInstance();
+    prefs.remove(HEADER_TOKEN);
     await firebaseAuth.signOut();
+  }
+
+  Future tokenScheduling() async {
+    await AndroidAlarmManager.periodic(
+      const Duration(minutes: 30),
+      5,
+      BackgroundService.callback,
+      startAt: DateTime.now(),
+      exact: true,
+      wakeup: true,
+    );
   }
 }
