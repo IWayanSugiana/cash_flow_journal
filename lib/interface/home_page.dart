@@ -1,4 +1,5 @@
 import 'package:cash_flow_journal/database/api/api_service.dart';
+import 'package:cash_flow_journal/database/auth/auth_service.dart';
 import 'package:cash_flow_journal/helper/result_satate_helper.dart';
 import 'package:cash_flow_journal/interface/list_page.dart';
 import 'package:cash_flow_journal/provider/authentication_provider.dart';
@@ -20,7 +21,14 @@ class HomePage extends StatelessWidget {
           child: Consumer<HomeProvider>(
             builder: (context, snapshot, child) {
               if (snapshot.state == ResultState.isLoading) {
-                return CircularProgressIndicator();
+                // return CircularProgressIndicator();
+                return ElevatedButton(
+                    onPressed: () {
+                      Provider.of<AuthenticationProvider>(context,
+                              listen: false)
+                          .userLogOut();
+                    },
+                    child: Text('log Out'));
               } else if (snapshot.state == ResultState.hasData) {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
