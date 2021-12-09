@@ -3,6 +3,7 @@ import 'dart:isolate';
 
 import 'package:cash_flow_journal/database/auth/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final ReceivePort port = ReceivePort();
@@ -31,7 +32,7 @@ class BackgroundService {
   static Future<void> callback() async {
     print('Alarm fired!');
     final prefs = await SharedPreferences.getInstance();
-
+    await Firebase.initializeApp();
     String? _headerToken =
         await FirebaseAuth.instance.currentUser?.getIdToken();
     prefs.setString(HEADER_TOKEN, _headerToken ?? 'null');
