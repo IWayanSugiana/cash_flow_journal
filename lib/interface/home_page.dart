@@ -2,8 +2,11 @@ import 'package:cash_flow_journal/database/api/api_service.dart';
 import 'package:cash_flow_journal/database/auth/auth_service.dart';
 import 'package:cash_flow_journal/helper/result_satate_helper.dart';
 import 'package:cash_flow_journal/interface/list_page.dart';
+import 'package:cash_flow_journal/interface/widget/line_chart.dart';
+import 'package:cash_flow_journal/interface/widget/pie_chart.dart';
 import 'package:cash_flow_journal/provider/authentication_provider.dart';
 import 'package:cash_flow_journal/provider/home_provider.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,23 +20,17 @@ class HomePage extends StatelessWidget {
     return ChangeNotifierProvider<HomeProvider>(
       create: (_) => HomeProvider(apiService: ApiService()),
       child: Scaffold(
-        body: Center(
+        body: SingleChildScrollView(
           child: Consumer<HomeProvider>(
             builder: (context, snapshot, child) {
               if (snapshot.state == ResultState.isLoading) {
-                // return CircularProgressIndicator();
-                return ElevatedButton(
-                    onPressed: () {
-                      Provider.of<AuthenticationProvider>(context,
-                              listen: false)
-                          .userLogOut();
-                    },
-                    child: Text('log Out'));
+                return CircularProgressIndicator();
               } else if (snapshot.state == ResultState.hasData) {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(snapshot.result.user),
+                    const PieChartWidget(),
+                    const LineChartWidget(),
                     ElevatedButton(
                       onPressed: () {
                         Provider.of<AuthenticationProvider>(context,
