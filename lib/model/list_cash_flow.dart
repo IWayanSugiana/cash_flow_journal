@@ -16,13 +16,13 @@ class CashFlowList {
   final String status;
   final String type;
   final int count;
-  final List<Datum> data;
+  final List<Data> data;
 
   factory CashFlowList.fromJson(Map<String, dynamic> json) => CashFlowList(
         status: json["status"],
         type: json["type"],
         count: json["count"],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        data: List<Data>.from(json["data"].map((x) => Data.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -33,8 +33,8 @@ class CashFlowList {
       };
 }
 
-class Datum {
-  Datum({
+class Data {
+  Data({
     required this.id,
     required this.detail,
   });
@@ -42,7 +42,7 @@ class Datum {
   final String id;
   final Detail detail;
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
         id: json["id"],
         detail: Detail.fromJson(json["detail"]),
       );
