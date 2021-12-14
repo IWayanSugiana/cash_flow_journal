@@ -2,6 +2,7 @@ import 'package:cash_flow_journal/database/api/api_service.dart';
 import 'package:cash_flow_journal/database/auth/auth_service.dart';
 import 'package:cash_flow_journal/helper/result_satate_helper.dart';
 import 'package:cash_flow_journal/interface/list_page.dart';
+import 'package:cash_flow_journal/interface/widget/home_app_bar.dart';
 import 'package:cash_flow_journal/interface/widget/line_chart.dart';
 import 'package:cash_flow_journal/interface/widget/pie_chart.dart';
 import 'package:cash_flow_journal/provider/authentication_provider.dart';
@@ -20,43 +21,30 @@ class HomePage extends StatelessWidget {
     return ChangeNotifierProvider<HomeProvider>(
       create: (_) => HomeProvider(apiService: ApiService()),
       child: Scaffold(
-        body: SingleChildScrollView(
-          child: Consumer<HomeProvider>(
-            builder: (context, snapshot, child) {
-              if (snapshot.state == ResultState.isLoading) {
-                return CircularProgressIndicator();
-              } else if (snapshot.state == ResultState.hasData) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const PieChartWidget(),
-                    const LineChartWidget(),
-                    ElevatedButton(
-                      onPressed: () {
-                        Provider.of<AuthenticationProvider>(context,
-                                listen: false)
-                            .userLogOut();
-                      },
-                      child: Text('Log Out'),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ListPage()));
-                      },
-                      child: Text('list cash flow data'),
-                    ),
-                  ],
-                );
-              } else {
-                return Container(
-                  child: Text('Ini Error'),
-                );
-              }
-            },
-          ),
+        body: Consumer<HomeProvider>(
+          builder: (context, snapshot, child) {
+            if (snapshot.state == ResultState.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (snapshot.state == ResultState.hasData) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      HomeAppBar(),
+                      PieChartWidget(),
+                      LineChartWidget(),
+                    ],
+                  ),
+                ),
+              );
+            } else {
+              return Container(
+                child: Text('Ini Error'),
+              );
+            }
+          },
         ),
       ),
     );
