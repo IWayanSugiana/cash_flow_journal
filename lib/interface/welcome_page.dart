@@ -29,8 +29,7 @@ class WelcomePage extends StatelessWidget {
                       SlideInRight(
                         child: const Greeting(),
                         from: size.width + 10,
-                        delay: const Duration(seconds: 1),
-                        duration: const Duration(seconds: 2),
+                        duration: const Duration(milliseconds: 1500),
                       ),
                       SlideInRight(
                         child: const Padding(
@@ -38,8 +37,8 @@ class WelcomePage extends StatelessWidget {
                           child: Message(),
                         ),
                         from: size.width + 10,
-                        delay: const Duration(seconds: 2),
-                        duration: const Duration(seconds: 2),
+                        delay: const Duration(seconds: 1),
+                        duration: const Duration(milliseconds: 1500),
                       ),
                     ],
                   ),
@@ -66,8 +65,8 @@ class WelcomePage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  delay: const Duration(seconds: 4),
-                  duration: const Duration(seconds: 2),
+                  delay: const Duration(seconds: 2),
+                  duration: const Duration(milliseconds: 1500),
                 )
               ],
             ),
@@ -85,8 +84,7 @@ class AppTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 95,
+    return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Text(

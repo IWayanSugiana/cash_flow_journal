@@ -29,82 +29,89 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const AppTitle(),
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Login",
-                    style: textTheme.headline4?.apply(color: primaryColor),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: TextField(
-                      controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      decoration: InputDecoration(
-                        labelText: "Email",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const AppTitle(),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0, vertical: 16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Login",
+                      style: textTheme.headline4?.apply(color: primaryColor),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: TextField(
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.next,
+                        decoration: InputDecoration(
+                          labelText: "Email",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: TextField(
-                      controller: _passwordController,
-                      obscureText: true,
-                      keyboardType: TextInputType.visiblePassword,
-                      decoration: InputDecoration(
-                        labelText: "Password",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: TextField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        keyboardType: TextInputType.visiblePassword,
+                        decoration: InputDecoration(
+                          labelText: "Password",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 16.0),
-                    child: SizedBox(
-                      width: 175,
-                      height: 45,
-                      child: ElevatedButton(
-                        onPressed: () async {
-                          final result =
-                              await Provider.of<AuthenticationProvider>(context,
-                                      listen: false)
-                                  .userSignIn(_emailController.text,
-                                      _passwordController.text);
-                          if (result == 'Login Success') {
-                            Navigator.pushReplacementNamed(
-                                context, HomePage.routeName);
-                          }
-                        },
-                        child: Text(
-                          'Login',
-                          style: textTheme.button,
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          primary: primaryColor,
-                          onPrimary: onPrimaryColor,
-                          elevation: 0,
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: SizedBox(
+                        width: 175,
+                        height: 45,
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            final result =
+                                await Provider.of<AuthenticationProvider>(
+                                        context,
+                                        listen: false)
+                                    .userSignIn(_emailController.text,
+                                        _passwordController.text);
+                            if (result == 'Login Success') {
+                              Navigator.pushReplacementNamed(
+                                  context, HomePage.routeName);
+                            }
+                          },
+                          child: Text(
+                            'Login',
+                            style: textTheme.button,
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            primary: primaryColor,
+                            onPrimary: onPrimaryColor,
+                            elevation: 0,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            )
-          ],
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
