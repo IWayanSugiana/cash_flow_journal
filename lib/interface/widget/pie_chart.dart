@@ -6,41 +6,48 @@ class PieChartWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          flex: 2,
-          child: AspectRatio(
-            aspectRatio: 1,
-            child: PieChart(
-              PieChartData(
-                  borderData: FlBorderData(
-                    show: false,
-                  ),
-                  startDegreeOffset: 90,
-                  sectionsSpace: 5,
-                  centerSpaceRadius: 0,
-                  sections: showingSections()),
+        Text('Monthly Statistic,'),
+        Text('Bulan'),
+        Row(
+          children: [
+            Expanded(
+              flex: 2,
+              child: AspectRatio(
+                aspectRatio: 1.3,
+                child: PieChart(
+                  PieChartData(
+                      borderData: FlBorderData(
+                        show: false,
+                      ),
+                      startDegreeOffset: 90,
+                      sectionsSpace: 5,
+                      centerSpaceRadius: 0,
+                      sections: showingSections()),
+                ),
+              ),
             ),
-          ),
-        ),
-        Expanded(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.end,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              indicator(
-                const Color(0xff0293ee),
-                'Expenses',
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  indicator(
+                    const Color(0xff0293ee),
+                    'Expenses',
+                  ),
+                  const SizedBox(height: 5),
+                  indicator(
+                    const Color(0xfff8b250),
+                    'Incomes',
+                  ),
+                ],
               ),
-              const SizedBox(height: 5),
-              indicator(
-                const Color(0xfff8b250),
-                'Incomes',
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ],
     );
