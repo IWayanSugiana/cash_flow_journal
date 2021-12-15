@@ -2,6 +2,7 @@ import 'package:cash_flow_journal/database/api/api_service.dart';
 import 'package:cash_flow_journal/database/auth/auth_service.dart';
 import 'package:cash_flow_journal/helper/result_satate_helper.dart';
 import 'package:cash_flow_journal/interface/list_page.dart';
+import 'package:cash_flow_journal/interface/login_page.dart';
 import 'package:cash_flow_journal/interface/widget/home_app_bar.dart';
 import 'package:cash_flow_journal/interface/widget/line_chart.dart';
 import 'package:cash_flow_journal/interface/widget/pie_chart.dart';
@@ -40,8 +41,26 @@ class HomePage extends StatelessWidget {
                 ),
               );
             } else {
-              return Container(
-                child: Text('Ini Error'),
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text('Terjadi Kesalahan Silahkan Login Ulang'),
+                    ElevatedButton(
+                      onPressed: () async {
+                        final authProvider =
+                            Provider.of<AuthenticationProvider>(context,
+                                listen: false);
+                        await authProvider.userLogOut();
+                        if (authProvider.status != true) {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, LoginPage.routeName, (route) => false);
+                        }
+                      },
+                      child: Text('Log Out'),
+                    ),
+                  ],
+                ),
               );
             }
           },
