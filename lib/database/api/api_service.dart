@@ -61,13 +61,15 @@ class ApiService {
   Future<CashFlowDetail> getExpenseDetail(String id) async {
     final headerToken = await getToken();
 
-    final response = await http.post(Uri.parse(_baseUrl + "expenses/" + id),
+    final response = await http.get(Uri.parse(_baseUrl + "expenses/" + id),
         headers: {"Authorization": headerToken});
     if (response.statusCode == 200) {
       return CashFlowDetail.fromJson(json.decode(response.body));
     } else {
       throw Exception(
-        'Failed to load list cash flow data from url : ' + _baseUrl + "list",
+        'Failed to load expense data cash flow from url : ' +
+            _baseUrl +
+            "expenses/id",
       );
     }
   }
@@ -75,7 +77,7 @@ class ApiService {
   Future<CashFlowDetail> getIncomeDetail(String id) async {
     final headerToken = await getToken();
 
-    final response = await http.post(Uri.parse(_baseUrl + "incomes/" + id),
+    final response = await http.get(Uri.parse(_baseUrl + "incomes/" + id),
         headers: {"Authorization": headerToken});
     if (response.statusCode == 200) {
       return CashFlowDetail.fromJson(json.decode(response.body));
