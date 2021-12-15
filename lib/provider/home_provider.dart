@@ -19,12 +19,17 @@ class HomeProvider extends ChangeNotifier {
   Future _fetchAllData() async {
     _state = ResultState.isLoading;
     notifyListeners();
-    final dataCashFlow = await apiService.getCashFlowData();
-    if (dataCashFlow.status == "success") {
-      _cashFlowData = dataCashFlow;
-      _state = ResultState.hasData;
-      notifyListeners();
-    } else {
+    try {
+      final dataCashFlow = await apiService.getCashFlowData();
+      if (dataCashFlow.status == "success") {
+        _cashFlowData = dataCashFlow;
+        _state = ResultState.hasData;
+        notifyListeners();
+      } else {
+        _state = ResultState.isError;
+        notifyListeners();
+      }
+    } catch (e) {
       _state = ResultState.isError;
       notifyListeners();
     }
