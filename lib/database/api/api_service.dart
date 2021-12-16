@@ -80,7 +80,10 @@ class ApiService {
     final headerToken = await getToken();
 
     final response = await http.get(Uri.parse(_baseUrl + "incomes/" + id),
-        headers: {"Authorization": headerToken});
+        headers: {
+          "Authorization": headerToken,
+          "Content-Type": 'application/json'
+        });
     if (response.statusCode == 200) {
       return CashFlowDetail.fromJson(json.decode(response.body));
     } else {
@@ -90,30 +93,46 @@ class ApiService {
     }
   }
 
-  Future<String> postExpenseData(String id) async {
+  Future<String> postExpenseData(Map<String, dynamic> data) async {
     final headerToken = await getToken();
 
-    final response = await http.post(Uri.parse(_baseUrl + "expenses/" + id),
-        headers: {"Authorization": headerToken});
-    if (response.statusCode == 200) {
-      return 'Post Success';
-    } else {
-      throw Exception(
-        'Failed to load list cash flow data from url : ' + _baseUrl + "list",
-      );
-    }
-  }
-
-  Future<String> postIncomeData(String id) async {
-    final headerToken = await getToken();
-
-    final response = await http.post(Uri.parse(_baseUrl + "incomes/" + id),
-        headers: {"Authorization": headerToken});
+    final response = await http.post(
+      Uri.parse(_baseUrl + "expenses"),
+      headers: {"Authorization": headerToken},
+      body: json.encode(data),
+    );
     if (response.statusCode == 201) {
       return 'Post Success';
     } else {
       throw Exception(
-        'Failed to load list cash flow data from url : ' + _baseUrl + "list",
+        'Failed to post cash flow data from url : ' + _baseUrl + "expenses",
+      );
+    }
+  }
+
+  Future<String> postIncomeData(Map<String, dynamic> data) async {
+    final headerToken = await getToken();
+    try {
+      final response = await http.post(
+        Uri.parse(_baseUrl + "incomes"),
+        headers: {
+          "Authorization": headerToken,
+          "Content-Type": 'application/json'
+        },
+        body: json.encode(data),
+      );
+      if (response.statusCode == 201) {
+        return 'Post Success';
+      } else {
+        throw Exception(
+          'Failed to post cash flow data from url : ' + _baseUrl + "incomes",
+        );
+      }
+    } catch (e) {
+      throw Exception(
+        'Failed to post cash flow data from url ini exceptin: ' +
+            _baseUrl +
+            "incomes",
       );
     }
   }
