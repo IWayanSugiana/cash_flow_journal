@@ -1,4 +1,3 @@
-import 'package:cash_flow_journal/database/api/api_service.dart';
 import 'package:cash_flow_journal/helper/currency_helper.dart';
 import 'package:cash_flow_journal/helper/result_satate_helper.dart';
 import 'package:cash_flow_journal/interface/detail_page.dart';
@@ -14,43 +13,33 @@ class ListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider<ExpensesProvider>(
-          create: (_) => ExpensesProvider(apiService: ApiService()),
-        ),
-        ChangeNotifierProvider<IncomesProvider>(
-          create: (_) => IncomesProvider(apiService: ApiService()),
-        )
-      ],
-      child: Scaffold(
-        body: DefaultTabController(
-          length: 2,
-          child: SafeArea(
-            child: Column(
-              children: [
-                const CustomAppBar(title: 'History'),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Column(
-                      children: [
-                        const TabBar(
-                          tabs: [Tab(text: 'Expenses'), Tab(text: 'Incomes')],
-                          labelColor: Colors.black,
-                        ),
-                        Expanded(
-                          child: TabBarView(children: [
-                            expensesTab(),
-                            incomesTab(),
-                          ]),
-                        ),
-                      ],
-                    ),
+    return Scaffold(
+      body: DefaultTabController(
+        length: 2,
+        child: SafeArea(
+          child: Column(
+            children: [
+              const CustomAppBar(title: 'History'),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Column(
+                    children: [
+                      const TabBar(
+                        tabs: [Tab(text: 'Expenses'), Tab(text: 'Incomes')],
+                        labelColor: Colors.black,
+                      ),
+                      Expanded(
+                        child: TabBarView(children: [
+                          expensesTab(),
+                          incomesTab(),
+                        ]),
+                      ),
+                    ],
                   ),
-                )
-              ],
-            ),
+                ),
+              )
+            ],
           ),
         ),
       ),
@@ -90,7 +79,7 @@ class ListPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      DateFormat('yyyy-MM-dd')
+                      DateFormat('dd-MM-yyyy')
                           .format(
                             DateTime.fromMillisecondsSinceEpoch(
                               data.createdAt.seconds * 1000,
@@ -144,7 +133,7 @@ class ListPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      DateFormat('yyyy-MM-dd')
+                      DateFormat('dd-MM-yyyy')
                           .format(
                             DateTime.fromMillisecondsSinceEpoch(
                               data.createdAt.seconds * 1000,

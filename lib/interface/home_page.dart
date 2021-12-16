@@ -1,15 +1,12 @@
 import 'package:cash_flow_journal/database/api/api_service.dart';
-import 'package:cash_flow_journal/database/auth/auth_service.dart';
 import 'package:cash_flow_journal/helper/currency_helper.dart';
 import 'package:cash_flow_journal/helper/result_satate_helper.dart';
-import 'package:cash_flow_journal/interface/list_page.dart';
 import 'package:cash_flow_journal/interface/login_page.dart';
 import 'package:cash_flow_journal/interface/widget/home_app_bar.dart';
 import 'package:cash_flow_journal/interface/widget/line_chart.dart';
 import 'package:cash_flow_journal/interface/widget/pie_chart.dart';
 import 'package:cash_flow_journal/provider/authentication_provider.dart';
 import 'package:cash_flow_journal/provider/home_provider.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -94,7 +91,7 @@ class HomePage extends StatelessWidget {
                           context, LoginPage.routeName, (route) => false);
                     }
                   },
-                  child: Text('Log Out'),
+                  child: const Text('Log Out'),
                 ),
               ],
             ),
@@ -152,7 +149,7 @@ Widget yearlyStatisticChart() {
                         context, LoginPage.routeName, (route) => false);
                   }
                 },
-                child: Text('Log Out'),
+                child: const Text('Log Out'),
               ),
             ],
           ),
