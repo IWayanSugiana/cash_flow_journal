@@ -1,16 +1,36 @@
+import 'package:cash_flow_journal/helper/currency_helper.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class PieChartWidget extends StatelessWidget {
-  const PieChartWidget({Key? key}) : super(key: key);
+  const PieChartWidget({
+    Key? key,
+    required this.expensesTotal,
+    required this.incomesTotal,
+    required this.title,
+    required this.subTitle,
+  }) : super(key: key);
+
+  final double expensesTotal;
+  final double incomesTotal;
+  final String title;
+  final String subTitle;
+
+  double _getPercent(double data1, double data2) {
+    return (data1 / (data1 + data2)) * 100;
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Monthly Statistic,'),
-        Text('Bulan'),
+        Column(
+          children: [
+            Text(title),
+            Text(subTitle),
+          ],
+        ),
         Row(
           children: [
             Expanded(
@@ -19,13 +39,14 @@ class PieChartWidget extends StatelessWidget {
                 aspectRatio: 1.3,
                 child: PieChart(
                   PieChartData(
-                      borderData: FlBorderData(
-                        show: false,
-                      ),
-                      startDegreeOffset: 90,
-                      sectionsSpace: 5,
-                      centerSpaceRadius: 0,
-                      sections: showingSections()),
+                    borderData: FlBorderData(
+                      show: false,
+                    ),
+                    startDegreeOffset: 90,
+                    sectionsSpace: 5,
+                    centerSpaceRadius: 0,
+                    sections: showingSections(),
+                  ),
                 ),
               ),
             ),
@@ -49,6 +70,27 @@ class PieChartWidget extends StatelessWidget {
             ),
           ],
         ),
+        typeAmountTile()
+      ],
+    );
+  }
+
+  Widget typeAmountTile() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Column(
+          children: [
+            Text('Expense:'),
+            Text(CurrencyHelper.format(expensesTotal)),
+          ],
+        ),
+        Column(
+          children: [
+            Text('Income:'),
+            Text(CurrencyHelper.format(incomesTotal)),
+          ],
+        )
       ],
     );
   }
@@ -87,8 +129,11 @@ class PieChartWidget extends StatelessWidget {
           case 0:
             return PieChartSectionData(
               color: const Color(0xff0293ee),
-              value: 5000,
+              value: expensesTotal,
               radius: radius,
+              title:
+                  _getPercent(expensesTotal, incomesTotal).toStringAsFixed(0) +
+                      ' %',
               titleStyle: TextStyle(
                   fontSize: fontSize,
                   fontWeight: FontWeight.bold,
@@ -97,8 +142,11 @@ class PieChartWidget extends StatelessWidget {
           case 1:
             return PieChartSectionData(
               color: const Color(0xfff8b250),
-              value: 10000,
+              value: incomesTotal,
               radius: radius,
+              title:
+                  _getPercent(incomesTotal, expensesTotal).toStringAsFixed(0) +
+                      ' %',
               titleStyle: TextStyle(
                   fontSize: fontSize,
                   fontWeight: FontWeight.bold,

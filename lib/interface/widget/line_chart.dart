@@ -1,10 +1,23 @@
+import 'package:cash_flow_journal/model/statistic_year.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class _LineChart extends StatelessWidget {
-  const _LineChart({required this.isShowingMainData});
+  const _LineChart({
+    Key? key,
+    required this.statisticDataExpenses,
+    required this.statisticDataIncomes,
+    required this.indexCount,
+    required this.expenseAmount,
+    required this.incomeAmount,
+  }) : super(key: key);
 
-  final bool isShowingMainData;
+  final List<Data> statisticDataExpenses;
+  final List<Data> statisticDataIncomes;
+  final int indexCount;
+
+  final double incomeAmount;
+  final double expenseAmount;
 
   @override
   Widget build(BuildContext context) {
@@ -20,14 +33,14 @@ class _LineChart extends StatelessWidget {
         titlesData: titlesData,
         borderData: borderData,
         lineBarsData: lineBarsData,
-        minX: 1,
-        maxX: 12,
-        maxY: 6,
+        minX: 0,
+        maxX: 5,
+        maxY: 11,
         minY: 0,
       );
 
   LineTouchData get lineTouchData => LineTouchData(
-        enabled: false,
+        enabled: true,
       );
 
   FlTitlesData get titlesData => FlTitlesData(
@@ -37,16 +50,18 @@ class _LineChart extends StatelessWidget {
         leftTitles: leftTitles(
           getTitles: (value) {
             switch (value.toInt()) {
-              case 1:
-                return '1m';
+              case 0:
+                return '0%';
               case 2:
-                return '2m';
-              case 3:
-                return '3m';
+                return '20%';
               case 4:
-                return '5m';
-              case 5:
-                return '6m';
+                return '40%';
+              case 6:
+                return '60%';
+              case 8:
+                return '80%';
+              case 10:
+                return '100%';
             }
             return '';
           },
@@ -54,16 +69,16 @@ class _LineChart extends StatelessWidget {
       );
 
   List<LineChartBarData> get lineBarsData => [
-        lineChartBarData1,
-        lineChartBarData2,
+        lineChartBarDataIncome,
+        lineChartBarDataExpense,
       ];
 
   SideTitles leftTitles({required GetTitleFunction getTitles}) => SideTitles(
         getTitles: getTitles,
         showTitles: true,
-        margin: 8,
+        margin: 15,
         interval: 1,
-        reservedSize: 40,
+        reservedSize: 35,
         getTextStyles: (context, value) => const TextStyle(
           color: Color(0xff75729e),
           fontWeight: FontWeight.bold,
@@ -79,36 +94,10 @@ class _LineChart extends StatelessWidget {
         getTextStyles: (context, value) => const TextStyle(
           color: Color(0xff72719b),
           fontWeight: FontWeight.bold,
-          fontSize: 16,
+          fontSize: 14,
         ),
         getTitles: (value) {
-          switch (value.toInt()) {
-            case 1:
-              return 'JAN';
-            case 2:
-              return 'FEB';
-            case 3:
-              return 'MAR';
-            case 4:
-              return 'APR';
-            case 5:
-              return 'MEI';
-            case 6:
-              return 'JUN';
-            case 7:
-              return 'JUL';
-            case 8:
-              return 'AGST';
-            case 9:
-              return 'SEPT';
-            case 10:
-              return 'OKT';
-            case 11:
-              return 'NOV';
-            case 12:
-              return 'DEC';
-          }
-          return '';
+          return statisticDataIncomes[(value.toInt()) + indexCount].month;
         },
       );
 
@@ -124,26 +113,27 @@ class _LineChart extends StatelessWidget {
         ),
       );
 
-  LineChartBarData get lineChartBarData1 => LineChartBarData(
+  LineChartBarData get lineChartBarDataIncome => LineChartBarData(
         isCurved: true,
         curveSmoothness: 0,
         colors: const [Color(0x444af699)],
         barWidth: 4,
         isStrokeCapRound: true,
-        dotData: FlDotData(show: false),
-        belowBarData: BarAreaData(show: false),
-        spots: const [
-          FlSpot(1, 1),
-          FlSpot(3, 4),
-          FlSpot(5, 1.8),
-          FlSpot(7, 5),
-          FlSpot(10, 2),
-          FlSpot(12, 2.2),
-          FlSpot(13, 1.8),
-        ],
+        dotData: FlDotData(show: true),
+        belowBarData: BarAreaData(show: true),
+        spots: List.generate(
+          6,
+          (index) => FlSpot(
+            index.toDouble(),
+            _getPercent(
+              statisticDataIncomes[indexCount + index].amount,
+              incomeAmount,
+            ),
+          ),
+        ),
       );
 
-  LineChartBarData get lineChartBarData2 => LineChartBarData(
+  LineChartBarData get lineChartBarDataExpense => LineChartBarData(
         isCurved: true,
         curveSmoothness: 0,
         colors: const [Color(0x99aa4cfc)],
@@ -151,104 +141,153 @@ class _LineChart extends StatelessWidget {
         isStrokeCapRound: true,
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
-        spots: const [
-          FlSpot(1, 1000 / 1000),
-          FlSpot(3, 1500 / 1000),
-          FlSpot(7, 1.2),
-          FlSpot(10, 2.8),
-          FlSpot(12, 2.6),
-          FlSpot(13, 3.9),
-        ],
+        spots: List.generate(
+          6,
+          (index) => FlSpot(
+            index.toDouble(),
+            _getPercent(
+              statisticDataExpenses[indexCount + index].amount,
+              expenseAmount,
+            ),
+          ),
+        ),
       );
-}
 
-class LineChartWidget extends StatefulWidget {
-  const LineChartWidget({Key? key}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() => LineChartWidgetState();
-}
-
-class LineChartWidgetState extends State<LineChartWidget> {
-  late bool isShowingMainData;
-
-  @override
-  void initState() {
-    super.initState();
-    isShowingMainData = true;
+  double _getPercent(double data1, double data2) {
+    return ((data1 / data2) * 100) / 10;
   }
+}
+
+class LineChartWidget extends StatelessWidget {
+  const LineChartWidget(
+      {Key? key,
+      required this.statisticData,
+      required this.expensesTotal,
+      required this.incomesTotal})
+      : super(key: key);
+
+  final StatisticYear statisticData;
+  final double expensesTotal;
+  final double incomesTotal;
 
   @override
   Widget build(BuildContext context) {
-    return AspectRatio(
-      aspectRatio: 1.5,
-      child: Container(
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(18)),
-          gradient: LinearGradient(
-            colors: [
-              Color(0xff2c274c),
-              Color(0xff46426c),
+    return DefaultTabController(
+      length: 2,
+      child: SizedBox(
+        height: 400,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const TabBar(
+              tabs: [Tab(text: 'JAN - JUN'), Tab(text: 'JUL - DEC')],
+              labelColor: Colors.black,
+            ),
+            Expanded(
+              child: TabBarView(children: [
+                lineChart1(),
+                lineChart2(),
+              ]),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget lineChart2() {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: AspectRatio(
+        aspectRatio: 1.5,
+        child: Container(
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(18)),
+            gradient: LinearGradient(
+              colors: [
+                Color(0xff2c274c),
+                Color(0xff46426c),
+              ],
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              const SizedBox(
+                height: 20,
+              ),
+              Center(child: Text('Monthly Statistic')),
+              const SizedBox(
+                height: 30,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 16.0, left: 6.0),
+                  child: _LineChart(
+                    statisticDataExpenses: statisticData.dataExpanse,
+                    statisticDataIncomes: statisticData.dataIncome,
+                    indexCount: 6,
+                    incomeAmount: incomesTotal,
+                    expenseAmount: expensesTotal,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
             ],
-            begin: Alignment.bottomCenter,
-            end: Alignment.topCenter,
           ),
         ),
-        child: Stack(
-          children: <Widget>[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                const SizedBox(
-                  height: 37,
-                ),
-                const Text(
-                  'Unfold Shop 2018',
-                  style: TextStyle(
-                    color: Color(0xff827daa),
-                    fontSize: 16,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(
-                  height: 4,
-                ),
-                const Text(
-                  'Monthly Sales',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 2,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(
-                  height: 37,
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(right: 16.0, left: 6.0),
-                    child: _LineChart(isShowingMainData: isShowingMainData),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
+      ),
+    );
+  }
+
+  Widget lineChart1() {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: AspectRatio(
+        aspectRatio: 1.5,
+        child: Container(
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(18)),
+            gradient: LinearGradient(
+              colors: [
+                Color(0xff2c274c),
+                Color(0xff46426c),
               ],
+              begin: Alignment.bottomCenter,
+              end: Alignment.topCenter,
             ),
-            IconButton(
-              icon: Icon(
-                Icons.refresh,
-                color: Colors.white.withOpacity(isShowingMainData ? 1.0 : 0.5),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              const SizedBox(
+                height: 20,
               ),
-              onPressed: () {
-                setState(() {
-                  isShowingMainData = !isShowingMainData;
-                });
-              },
-            )
-          ],
+              Center(child: Text('Monthly Statistic')),
+              const SizedBox(
+                height: 30,
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 16.0, left: 6.0),
+                  child: _LineChart(
+                    statisticDataExpenses: statisticData.dataExpanse,
+                    statisticDataIncomes: statisticData.dataIncome,
+                    indexCount: 0,
+                    incomeAmount: incomesTotal,
+                    expenseAmount: expensesTotal,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+            ],
+          ),
         ),
       ),
     );
