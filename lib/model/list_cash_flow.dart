@@ -61,12 +61,12 @@ class Detail {
   });
 
   final String categoryType;
-  final int amount;
+  final double amount;
   final CreatedAt createdAt;
 
   factory Detail.fromJson(Map<String, dynamic> json) => Detail(
         categoryType: json["categoryType"],
-        amount: json["amount"],
+        amount: json["amount"].toDouble(),
         createdAt: CreatedAt.fromJson(json["createdAt"]),
       );
 
