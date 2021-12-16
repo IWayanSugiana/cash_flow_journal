@@ -77,31 +77,21 @@ class AddFormTile extends StatelessWidget {
           },
         );
       default:
-        return TextField();
+        return const TextField();
     }
   }
 }
 
-class TypeField extends StatefulWidget {
+class TypeField extends StatelessWidget {
   TypeField({Key? key, required this.textController}) : super(key: key);
-  TextEditingController textController;
-  @override
-  _TypeFieldState createState() => _TypeFieldState();
-}
+  final TextEditingController textController;
 
-class _TypeFieldState extends State<TypeField> {
-  List<String> type = ['Income', 'Expense'];
+  final List<String> type = ['Income', 'Expense'];
 
   @override
   Widget build(BuildContext context) {
-    widget.textController.text = 'Income';
+    textController.text = 'Income';
     return DropdownButtonFormField<String>(
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Required! Please Choose the Cash Type';
-        }
-        return null;
-      },
       items: type.map((String type) {
         return DropdownMenuItem(
           value: type,
@@ -109,43 +99,31 @@ class _TypeFieldState extends State<TypeField> {
         );
       }).toList(),
       onChanged: (newValue) {
-        // do other stuff with _category
-        setState(() => widget.textController.text = newValue!);
+        textController.text = newValue!;
       },
-      value: widget.textController.text,
+      onSaved: (newValue) {
+        textController.text = newValue!;
+      },
+      value: textController.text,
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.fromLTRB(10, 20, 10, 20),
+        contentPadding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
         filled: true,
         fillColor: Colors.grey[200],
-        // hintText: Localization.of(context).category,
-        // errorText: errorSnapshot.data == 0
-        //     ? Localization.of(context).categoryEmpty
-        //     : null),
       ),
     );
   }
 }
 
-class CategoryField extends StatefulWidget {
+class CategoryField extends StatelessWidget {
   CategoryField({Key? key, required this.textController}) : super(key: key);
-  TextEditingController textController;
-  @override
-  _CategoryFieldState createState() => _CategoryFieldState();
-}
+  final TextEditingController textController;
 
-class _CategoryFieldState extends State<CategoryField> {
-  List<String> category = ['Food', 'Shoping'];
+  final List<String> category = ['Food', 'Shoping'];
 
   @override
   Widget build(BuildContext context) {
-    widget.textController.text = 'Food';
+    textController.text = 'Food';
     return DropdownButtonFormField<String>(
-      validator: (value) {
-        if (value == null || value.isEmpty) {
-          return 'Required! Please Choose the Category';
-        }
-        return null;
-      },
       items: category.map((String category) {
         return DropdownMenuItem(
           value: category,
@@ -153,34 +131,27 @@ class _CategoryFieldState extends State<CategoryField> {
         );
       }).toList(),
       onChanged: (newValue) {
-        // do other stuff with _category
-        setState(() => widget.textController.text = newValue!);
+        textController.text = newValue!;
       },
-      value: widget.textController.text,
+      onSaved: (newValue) {
+        textController.text = newValue!;
+      },
+      value: textController.text,
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.fromLTRB(10, 20, 10, 20),
+        contentPadding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
         filled: true,
         fillColor: Colors.grey[200],
-        // hintText: Localization.of(context).category,
-        // errorText: errorSnapshot.data == 0
-        //     ? Localization.of(context).categoryEmpty
-        //     : null),
       ),
     );
   }
 }
 
-class DatePickerField extends StatefulWidget {
+class DatePickerField extends StatelessWidget {
   DatePickerField({Key? key, required this.textController}) : super(key: key);
 
-  TextEditingController textController;
-  @override
-  _DatePickerFieldState createState() => _DatePickerFieldState();
-}
+  final TextEditingController textController;
 
-class _DatePickerFieldState extends State<DatePickerField> {
-  DateTime selectedDate = DateTime.now();
-  late DateTime selectDateTime;
+  final DateTime selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -191,14 +162,15 @@ class _DatePickerFieldState extends State<DatePickerField> {
         }
         return null;
       },
-      controller: widget.textController,
+      controller: textController,
       initialValue: null,
-      keyboardType: TextInputType.datetime,
+      readOnly: true,
       onTap: () => _selectDate(context),
     );
   }
 
   _selectDate(BuildContext context) async {
+    late DateTime selectDateTime;
     final DateTime? selectDate = await showDatePicker(
       context: context,
       initialDate: selectedDate,
@@ -220,8 +192,6 @@ class _DatePickerFieldState extends State<DatePickerField> {
       selectDateTime = selectedDate;
     }
 
-    setState(() {
-      widget.textController.text = selectDateTime.toString();
-    });
+    textController.text = selectDateTime.toString();
   }
 }

@@ -37,4 +37,12 @@ class ExpensesProvider extends ChangeNotifier {
     final dataCashFlow = await apiService.getExpenseDetail(cashId);
     return dataCashFlow;
   }
+
+  Future<String> addData(Map<String, dynamic> data) async {
+    final result = await apiService.postExpenseData(data);
+    if (result == "Post Success") {
+      return result;
+    }
+    return "Error";
+  }
 }

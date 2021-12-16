@@ -35,4 +35,12 @@ class IncomesProvider extends ChangeNotifier {
     final dataCashFlow = await apiService.getIncomeDetail(cashId);
     return dataCashFlow;
   }
+
+  Future<String> addData(Map<String, dynamic> data) async {
+    final result = await apiService.postIncomeData(data);
+    if (result == "Post Success") {
+      return result;
+    }
+    return "Error";
+  }
 }

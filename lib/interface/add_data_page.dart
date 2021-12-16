@@ -1,6 +1,9 @@
 import 'package:cash_flow_journal/interface/widget/custom_app_bar.dart';
 import 'package:cash_flow_journal/interface/widget/add_form_tile.dart';
+import 'package:cash_flow_journal/provider/expenses_provider.dart';
+import 'package:cash_flow_journal/provider/incomes_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AddDataPage extends StatelessWidget {
   AddDataPage({
@@ -46,16 +49,33 @@ class AddDataPage extends StatelessWidget {
                           textController: amountController,
                         ),
                         ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             if (_formKey.currentState!.validate()) {
-                              print(dateController.text);
-                              print(typeController.text);
-                              print(categoryController.text);
-                              print(descriptController.text);
-                              print(amountController.text);
+                              final Map<String, dynamic> data = {
+                                "amount": double.parse(amountController.text),
+                                "categoryType": categoryController.text,
+                                "date": dateController.text,
+                                "description": descriptController.text,
+                              };
+
+                              if (typeController.text == 'Expense') {
+                                final provider = Provider.of<ExpensesProvider>(
+                                    context,
+                                    listen: false);
+                                final result = await provider.addData(data);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(result)));
+                              } else {
+                                final provider = Provider.of<IncomesProvider>(
+                                    context,
+                                    listen: false);
+                                final result = await provider.addData(data);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text(result)));
+                              }
                             }
                           },
-                          child: Text("Submit"),
+                          child: const Text("Submit"),
                         )
                       ],
                     ),
