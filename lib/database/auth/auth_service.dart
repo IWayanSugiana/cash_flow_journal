@@ -30,7 +30,6 @@ class AuthService {
   }
 
   Future<String?> signIn(String email, String password) async {
-    print(await firebaseAuth.currentUser?.getIdToken());
     try {
       await firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);

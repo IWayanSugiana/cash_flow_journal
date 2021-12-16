@@ -4,6 +4,8 @@ import 'package:cash_flow_journal/database/auth/auth_service.dart';
 import 'package:cash_flow_journal/model/cash_flow.dart';
 import 'package:cash_flow_journal/model/detail_cash_flow.dart';
 import 'package:cash_flow_journal/model/list_cash_flow.dart';
+import 'package:cash_flow_journal/model/statistic_month.dart';
+import 'package:cash_flow_journal/model/statistic_year.dart';
 import 'package:http/http.dart' as http;
 
 class ApiService {
@@ -112,6 +114,38 @@ class ApiService {
     } else {
       throw Exception(
         'Failed to load list cash flow data from url : ' + _baseUrl + "list",
+      );
+    }
+  }
+
+  Future<StatisticMonth> getStatisticMonthData() async {
+    final headerToken = await getToken();
+
+    final response = await http.get(Uri.parse(_baseUrl + "statistic/month"),
+        headers: {"Authorization": headerToken});
+    if (response.statusCode == 200) {
+      return StatisticMonth.fromJson(json.decode(response.body));
+    } else {
+      throw Exception(
+        'Failed to load statistic mont data from url : ' +
+            _baseUrl +
+            "statistic/month",
+      );
+    }
+  }
+
+  Future<StatisticYear> getStatisticYearData() async {
+    final headerToken = await getToken();
+
+    final response = await http.get(Uri.parse(_baseUrl + "statistic/year"),
+        headers: {"Authorization": headerToken});
+    if (response.statusCode == 200) {
+      return StatisticYear.fromJson(json.decode(response.body));
+    } else {
+      throw Exception(
+        'Failed to load statistic mont data from url : ' +
+            _baseUrl +
+            "statistic/month",
       );
     }
   }
